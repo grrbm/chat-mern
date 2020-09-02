@@ -1,6 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+const io = require('socket.io'),
+      Qs = require('qs');
 
 function ChatPage(){
+    // const location = useLocation();
+    // useEffect(()=>{
+    //     const socket = io()
+    //     const {username, room} = Qs.parse(location.search.slice(1))
+    //     socket.emit('join', {username, room: room.toLowerCase()}, (error) => {
+    //         if (error) {
+    //             alert(error)
+    //             location.href = '/'
+    //         }
+    //     })
+    // },[])
     return (
         <div id="chat-page" className="chat">
             <div id="sidebar" className="chat__sidebar">

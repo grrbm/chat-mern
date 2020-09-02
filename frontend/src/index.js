@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import JoinPage from './pages/JoinPage.js'
-import ChatPage from './pages/ChatPage.js'
+import App from './App.js'
+import {  BrowserRouter as Router } from "react-router-dom";
 import styles from './css/styles.css'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ChatPage />
-  </React.StrictMode>,
+  <Router>
+    <App />
+  </Router>,
   document.getElementById('root')
 );
