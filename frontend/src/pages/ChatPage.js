@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 const io = require('socket.io'),
       Qs = require('qs');
 
-function ChatPage(){
+function ChatPage(props){
     // const location = useLocation();
     // useEffect(()=>{
     //     const socket = io()
@@ -19,9 +19,9 @@ function ChatPage(){
         <div id="chat-page" className="chat">
             <div id="sidebar" className="chat__sidebar">
                 <h2 className="room-title"></h2>
-                <h3 className="list-title">SalaMaluca</h3>
+                <h3 className="list-title">{props.location.state.room}</h3>
                 <ul className="users">
-                    <li>guilherme</li>
+                    <li>{props.location.state.username}</li>
                 </ul>
             </div>
             <div className="chat__main">

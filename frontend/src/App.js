@@ -11,7 +11,7 @@ function App(){
         <div id="app">
             <Switch>
                 <Route exact path="/" component={JoinPage} />
-                <Route exact path="/chat" component={ChatPage} />
+                <Route path="/chat" render={(props) => <ChatPage {...props}/>} />
             </Switch>
         </div>
     )

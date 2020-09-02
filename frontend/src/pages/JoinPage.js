@@ -7,7 +7,13 @@ function JoinPage(){
         setToChatPage(true);
     }
     if (toChatPage === true) {
-        return <Redirect to='/chat' />
+        console.log("username: "+document.querySelectorAll('input')[0].value);
+        return <Redirect to={{
+            pathname: "/chat",
+            state: { username: document.querySelectorAll('input')[0].value, 
+                     room: document.querySelectorAll('input')[1].value }
+          }} />
+        
     }
     return (
         <div id="join-page" className="centered-form">
