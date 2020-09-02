@@ -1,20 +1,18 @@
 import React, { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
-const io = require('socket.io'),
-      Qs = require('qs');
+const io = require('socket.io-client');
 
 function ChatPage(props){
-    // const location = useLocation();
-    // useEffect(()=>{
-    //     const socket = io()
-    //     const {username, room} = Qs.parse(location.search.slice(1))
-    //     socket.emit('join', {username, room: room.toLowerCase()}, (error) => {
-    //         if (error) {
-    //             alert(error)
-    //             location.href = '/'
-    //         }
-    //     })
-    // },[])
+    useEffect(()=>{
+        const socket = io('http://localhost:4000')
+        const username = props.location.state.username;
+        const room = props.location.state.room;
+        socket.emit('join', {username, room: room.toLowerCase()}, (error) => {
+            if (error) {
+                alert(error)
+                props.location.href = '/'
+            }
+        })
+    },[])
     return (
         <div id="chat-page" className="chat">
             <div id="sidebar" className="chat__sidebar">
@@ -36,7 +34,7 @@ function ChatPage(props){
                 </div>
                 <div className="compose">
                     <form id="message-form">
-                        <input name="message" placeholder="Message" required="" autocomplete="off"/>
+                        <input name="message" placeholder="Message" required="" autoComplete="off"/>
                         <button>Send</button>
                     </form>
                     <button id="send-location">Send Location</button>
