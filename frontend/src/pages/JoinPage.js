@@ -1,17 +1,29 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 function JoinPage(){
     const [toChatPage, setToChatPage] = useState(false);
-    function handleClick(){
+    function handleClick(e){
+        e.preventDefault();
         async function signinUser(){
-            const result = await axios.post('localhost:4000/auth/signin', {
-                username: document.querySelectorAll('input')[0].value, 
-                password: document.querySelectorAll('input')[1].value
-            });
-            console.log("Result: "+JSON.stringify(result));
-            //setToChatPage(true);
+            try {
+                const result = await axios({
+                    method:'post',
+                    url:'http://localhost:4000/auth/signin', 
+                    data: { 
+                        username: document.querySelectorAll('input')[0].value, 
+                        password: document.querySelectorAll('input')[1].value
+                    }
+                });
+                setToChatPage(true);
+            } catch(e) {
+                if (e.toString().includes(400))
+                {
+                    Swal.fire("User doesn't exist");
+                }
+            }
         }
         signinUser();
     }
