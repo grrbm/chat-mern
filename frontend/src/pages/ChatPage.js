@@ -1,13 +1,41 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 const io = require('socket.io-client');
 
 function ChatPage(props){
     const [users, setUsers] = useState([]);
+    const socket = useRef(null);
+
+    function handleSendMessage(e){
+        e.preventDefault();
+    
+        const message = e.target.elements.message.value;
+
+        const $messageForm = document.querySelector('#message-form')
+        const $messageFormButton = $messageForm.querySelector('button')
+        const $messageFormInput = $messageForm.querySelector('input')
+    
+        $messageFormButton.setAttribute('disabled','disabled')
+        $messageFormInput.value = ''
+        $messageFormInput.focus()
+    
+    
+        
+        socket.current.emit('sendMessage', message, (error) => {
+            $messageFormButton.removeAttribute('disabled')
+            if (error){
+                return console.log(error)
+            }
+        })
+        
+    }
     useEffect(()=>{
-        const socket = io('http://localhost:4000')
+        socket.current = io('http://localhost:4000');
         const username = props.location.state.username;
         const room = props.location.state.room;
-        socket.emit('join', {username, room: room.toLowerCase()}, (error, users) => {
+        socket.current.on('roomData', ({room, users}) => {
+            setUsers(users);
+        })
+        socket.current.emit('join', {username, room: room.toLowerCase()}, (error, users) => {
             if (error) {
                 alert(error)
                 props.location.href = '/'
@@ -39,7 +67,7 @@ function ChatPage(props){
                 <div className="compose">
                     <form id="message-form">
                         <input name="message" placeholder="Message" required={true} autoComplete="off"/>
-                        <button>Send</button>
+                        <button onClick={handleSendMessage}>Send</button>
                     </form>
                     <button id="send-location">Send Location</button>
                 </div>
