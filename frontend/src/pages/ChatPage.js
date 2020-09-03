@@ -1,18 +1,46 @@
 import React, { useState, useEffect, useRef } from 'react'
 const io = require('socket.io-client');
+const moment = require('moment');
+
+const autoscroll = () => {
+
+    const $messages = document.querySelector('#messages');
+
+    // New message element
+    const $newMessage = $messages.lastElementChild
+
+    // Height of the new message
+    const newMessageStyles = getComputedStyle($newMessage)
+    const newMessageMargin = parseInt(newMessageStyles.marginBottom)
+    const newMessageHeight = $newMessage.offsetHeight + newMessageMargin
+
+    //Visible height
+    const visibleHeight = $messages.offsetHeight
+
+    //Height of messages container
+    const containerHeight = $messages.scrollHeight
+
+    // How far have I scrolled ?
+    const scrollOffset = $messages.scrollTop + visibleHeight
+
+    if (containerHeight - newMessageHeight <= scrollOffset) {
+        $messages.scrollTop = $messages.scrollHeight
+    }
+
+}
 
 function ChatPage(props){
     const [users, setUsers] = useState([]);
+    const [messages, setMessages] = useState([]);
     const socket = useRef(null);
 
     function handleSendMessage(e){
         e.preventDefault();
-    
-        const message = e.target.elements.message.value;
 
         const $messageForm = document.querySelector('#message-form')
         const $messageFormButton = $messageForm.querySelector('button')
         const $messageFormInput = $messageForm.querySelector('input')
+        const message = $messageFormInput.value;
     
         $messageFormButton.setAttribute('disabled','disabled')
         $messageFormInput.value = ''
@@ -35,6 +63,10 @@ function ChatPage(props){
         socket.current.on('roomData', ({room, users}) => {
             setUsers(users);
         })
+        socket.current.on('message',(message) => {
+            setMessages(messages => [...messages,message]);
+            autoscroll();
+        })
         socket.current.emit('join', {username, room: room.toLowerCase()}, (error, users) => {
             if (error) {
                 alert(error)
@@ -56,13 +88,20 @@ function ChatPage(props){
             </div>
             <div className="chat__main">
                 <div id="messages" className="chat__messages">
-                    <div className="message">
-                        <p>
-                            <span className="message__name">Admin</span>
-                            <span className="message__meta">9:20 am</span>
-                        </p>
-                        <p>Welcome!</p>
-                    </div>
+                    {
+                        messages.map((message)=>(
+                            <div className="message">
+                                <p>
+                                    <span className="message__name">{ message.username }</span>
+                                    <span className="message__meta">
+                                        { moment(message.createdAt).format('h:mm a') }
+                                    </span>
+                                </p>
+                                <p>{ message.text }</p>
+                            </div>
+                        ))
+                    }
+                    
                 </div>
                 <div className="compose">
                     <form id="message-form">
