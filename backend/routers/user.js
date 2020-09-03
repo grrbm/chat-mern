@@ -37,12 +37,11 @@ router.post('/users', async (req,res) => {
     console.log(`REQUEST :: create user  ${req.body.username}`);
   
     const newUser = {
-      email: req.body.email,
       username: req.body.username,
       password: req.body.password,
     };
   
-    const alreadyExistent = await User.find({ $or: [ { 'email': newUser.email }, { 'username': newUser.username } ]});
+    const alreadyExistent = await User.find({'username': newUser.username});
     
     console.log("alreadyExistent: "+alreadyExistent.username);
     if (alreadyExistent.length > 0)
@@ -66,61 +65,5 @@ router.post('/users', async (req,res) => {
      }
 });
 
-//UPDATE - updates a user
-router.patch('/users/:id', async (req,res) => {
-  console.log("REQUEST ::  update user "+req.params.id);
-  const updates = Object.keys(req.body)
-  console.log("keys = "+updates.toString());
-  const allowedUpdates = ["firstname","lastname","email", "username", "password",
-                          "profileImage","profileVisibility","qTrackSummary"];
-  const updatesAreValid = updates.every((update)=>allowedUpdates.includes(update))
-  if (!updatesAreValid)
-  {
-    return res.status(400).send({error: 'Updates not valid !'})
-  }
-  try{
-    const user = await User.findById(req.params.id);
-
-    updates.forEach((update) => user[update] = req.body[update]);
-    user.save();
-    
-    if (!user)
-    {
-      res.status(404).send({error: "User not found"})
-    }
-    res.send(user)
-  } catch(e){
-    res.status(500).send({error: e.toString()})
-  }
-})
-
-//DESTROY - delete user's info
-router.delete('/users/:id', async (req,res) => {
-  const _id = req.params.id;
-  
-  try{
-    const user = await User.findByIdAndDelete(_id)
-    if (!user)
-    {
-      return res.status(404).send({error: 'User not found'})
-    }
-    res.status(200).send(user)
-    console.log("user deleted successfully");
-
-  }catch(e){
-    res.status(500).send({error: e})
-  }
-})
-
-// EDIT /photos/:id/edit GET
-router.get('/users/:id/edit', async (req,res) => {
-
-});
-
-
-//NEW /photos/new	GET
-router.get('/users/:id/new', async (req,res) => {
-
-});
 
 module.exports = router;

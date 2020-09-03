@@ -185,7 +185,6 @@ function ChatPage(props){
                         <input name="message" placeholder="Message" required={true} autoComplete="off"/>
                         <button onClick={handleSendMessage}>Send</button>
                     </form>
-                    <button id="send-location">Send Location</button>
                 </div>
 
             </div>

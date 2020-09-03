@@ -27,8 +27,9 @@ io.on('connection', (socket) => {
         }
 
         socket.join(user.room)
-        
-        socket.emit('message', generateMessage('Admin','Welcome!'))
+        if(user.username.toLowerCase() !== 'admin'){
+            socket.emit('message', generateMessage('Admin','Welcome!'))
+        }
         socket.broadcast.to(room).emit('message', generateMessage('Admin',`${user.username} has joined!`))
         const users = getUsersInRoom(user.room);
         io.to(user.room).emit('roomData',{
