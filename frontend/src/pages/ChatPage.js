@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 const io = require('socket.io-client');
 const moment = require('moment');
+const Datetime = require('react-datetime');
 
 const autoscroll = () => {
 
@@ -32,6 +33,9 @@ const autoscroll = () => {
 function ChatPage(props){
     const [users, setUsers] = useState([]);
     const [messages, setMessages] = useState([]);
+    const [isAdmin, setIsAdmin] = useState(true);
+    const [usernameFilter, setUsernameFilter] = useState();
+    const [dateFilter, setDateFilter] = useState();
     const socket = useRef(null);
 
     function handleSendMessage(e){
@@ -56,6 +60,14 @@ function ChatPage(props){
         })
         
     }
+    function handleChangeUsernameFilter(e){
+        console.log(e.target.value); //logs the user event to the console
+        setUsernameFilter(e.target.value)
+    }
+    function handleChangeDateFilter(date){
+        console.log("date is "+date);
+        setDateFilter(date)
+    }
     useEffect(()=>{
         socket.current = io('http://localhost:4000');
         const username = props.location.state.username;
@@ -77,6 +89,15 @@ function ChatPage(props){
             console.log("These are the users: "+JSON.stringify(users));
         })
     },[])
+    function apply(message, filter){
+        var comparison = moment(message.createdAt).isSame(filter.createdAt,"minute");
+        console.log("checking "+message.createdAt+" against "+moment(filter.createdAt).format()+": "+comparison);
+        return (message.username.lastIndexOf(filter.username, 0) === 0 //checks if is prefix
+                || filter.username === undefined 
+                || filter.username.length === 0)
+                &&
+                comparison
+    }
     return (
         <div id="chat-page" className="chat">
             <div id="sidebar" className="chat__sidebar">
@@ -85,24 +106,46 @@ function ChatPage(props){
                 <ul className="users">
                     {users.map((user)=> (<li>{user.username}</li>))}
                 </ul>
+                { isAdmin 
+                    ? <div>
+                        <input 
+                            type="text"
+                            onChange = {handleChangeUsernameFilter}
+                            placeholder="Filter username"
+                            autoComplete="off"/>
+                        <Datetime 
+                            inputProps={{ placeholder: 'Pick a date and time' }}
+                            timeFormat={'HH:mm'}
+                            onChange={handleChangeDateFilter}
+                        />
+                        <label for="cars">Sort:</label>
+                        <select name="cars" id="cars">
+                            <option value="volvo">Newest First</option>
+                            <option value="saab">Oldest First</option>
+                        </select>
+                      </div>
+                    : ''
+                }
             </div>
             <div className="chat__main">
                 <div id="messages" className="chat__messages">
                     {
-                        messages.map((message)=>(
-                            <div className="message">
-                                <p>
-                                    <span className="message__meta">
-                                        { moment(message.createdAt).format('DD/MM/YYYY') }
-                                    </span>
-                                    <span className="message__name">{ message.username }</span>
-                                    <span className="message__meta">
-                                        { moment(message.createdAt).format('h:mm a') }
-                                    </span>
-                                </p>
-                                <p>{ message.text }</p>
-                            </div>
-                        ))
+                        messages
+                            .filter((message)=> (apply(message,{ username: usernameFilter, createdAt: dateFilter })) )
+                            .map((message)=>(
+                                <div className="message">
+                                    <p>
+                                        <span className="message__meta">
+                                            { moment(message.createdAt).format('DD/MM/YYYY') }
+                                        </span>
+                                        <span className="message__name">{ message.username }</span>
+                                        <span className="message__meta">
+                                            { moment(message.createdAt).format('HH:mm') }
+                                        </span>
+                                    </p>
+                                    <p>{ message.text }</p>
+                                </div>
+                            ))
                     }
                     
                 </div>
