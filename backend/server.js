@@ -3,8 +3,10 @@ const http = require('http')
 const express = require('express')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
+const mongoose = require('mongoose');
 const { generateMessage, generateLocationMessage } = require('./utils/messages')
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users')
+const User = require('./models/user')
 
 
 const app = express()
@@ -76,6 +78,39 @@ io.on('connection', (socket) => {
     })
 })
 
+// --------------------------------------------------------------------
+// MONGODB/MONGOOSE
+// --------------------------------------------------------------------
+const databaseUri = 'mongodb://localhost:27017/test-database';
+async function connectDB(){
+    const connection = await mongoose.connect(databaseUri, {
+                            useNewUrlParser: true,
+                            useCreateIndex: true,
+                            useUnifiedTopology: true,
+                            bufferCommands: false,
+                            bufferMaxEntries: 0,
+                            useFindAndModify: false 
+    })
+    .then(()=> console.log(`connected to ${databaseUri}`))
+    .catch(err => console.log(`Error on db connection:  ${err.message}`));
+    try{
+        const user = new User({username:'admin',password:'adminpass'});
+        const token = await user.generateAuthToken();
+        await user.save();
+        console.log(`STATUS :: Success`);
+    } catch (e) {
+        if (e.toString().substring(0,18) === 'MongoError: E11000')
+        {
+            console.log("Admin has already been created.");
+        }
+    }
+    
+}
+connectDB();
+
+// --------------------------------------------------------------------
+// SERVER LISTENER
+// --------------------------------------------------------------------
 server.listen(port, () => {
     console.log(`Server is up on port ${port}!`) 
 })
