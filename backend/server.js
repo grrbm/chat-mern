@@ -7,6 +7,12 @@ const mongoose = require('mongoose');
 const { generateMessage, generateLocationMessage } = require('./utils/messages')
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users')
 const User = require('./models/user')
+const   UserRouter   = require('./routers/user'),
+        AuthRouter   = require('./routers/auth')
+        
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const router = express.Router()
 
 
 const app = express()
@@ -18,6 +24,15 @@ const publicDirectoryPath = path.join(__dirname,'../public')
 
 app.use(express.static(publicDirectoryPath))
 
+const proxy = '';
+
+app.use(cors())
+   .use(bodyParser.json({limit: '50mb'}))
+   .use(bodyParser.urlencoded({limit: '50mb', extended: true }))
+   .use(proxy, router);
+
+app.use(proxy, AuthRouter);
+app.use(proxy, UserRouter);
 
 io.on('connection', (socket) => {
     console.log('New WebSocket connection')
@@ -97,7 +112,7 @@ async function connectDB(){
         const user = new User({username:'admin',password:'adminpass'});
         const token = await user.generateAuthToken();
         await user.save();
-        console.log(`STATUS :: Success`);
+        console.log(`Admin user created successfully !`);
     } catch (e) {
         if (e.toString().substring(0,18) === 'MongoError: E11000')
         {

@@ -7,8 +7,8 @@ const express = require('express'),
 // validate the user credentials
 router.post('/auth/signin', async function (req, res) {
   try{
-    console.log("credentials: email-"+req.body.email+", password-"+req.body.password);
-    const user = await User.findByCredentials(req.body.email, req.body.password);
+    console.log("credentials: username-"+req.body.username+", password-"+req.body.password);
+    const user = await User.findByCredentials(req.body.username, req.body.password);
     console.log("tokens: "+JSON.stringify(user.tokens));
     res.status(200).send(user);
   } catch(e){
