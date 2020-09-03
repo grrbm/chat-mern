@@ -90,11 +90,17 @@ button:disabled {
 }
 
 .chat__sidebar {
+    display: flex;
+    flex-direction: column;
     height: 100vh;
     color: white;
     background: #333744;
-    width: 225px;
+    width: 255px;
     overflow-y: scroll
+}
+
+#room-area {
+    flex-grow: 1;
 }
 
 /* Chat styles */
@@ -183,6 +189,22 @@ button:disabled {
     padding: 12px 24px 0 24px;
 }
 
+
+/* Admin Area */
+
+#admin-area {
+    width: 255px
+}
+.content {
+    padding: 12px 24px 0 24px;
+    margin-bottom: 15px;
+}
 .rdtPicker {
     color: black
+}
+#sorting {
+    margin: 1px 50px 1px 50px;
+}
+#username-filter {
+    margin-bottom: 3px;
 }

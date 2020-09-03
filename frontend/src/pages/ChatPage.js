@@ -106,27 +106,33 @@ function ChatPage(props){
     return (
         <div id="chat-page" className="chat">
             <div id="sidebar" className="chat__sidebar">
-                <h2 className="room-title"></h2>
-                <h3 className="list-title">{props.location.state.room}</h3>
-                <ul className="users">
-                    {users.map((user)=> (<li>{user.username}</li>))}
-                </ul>
+                <div id="room-area">
+                    <h2 className="room-title"></h2>
+                    <h3 className="list-title">{props.location.state.room}</h3>
+                    <ul className="users">
+                        {users.map((user)=> (<li>{user.username}</li>))}
+                    </ul>
+                </div>
                 { isAdmin 
-                    ? <div>
-                        <input 
-                            type="text"
-                            onChange = {handleChangeUsernameFilter}
-                            placeholder="Filter username"
-                            autoComplete="off"/>
-                        <Datetime 
-                            inputProps={{ placeholder: 'Pick a date and time' }}
-                            timeFormat={'HH:mm'}
-                            onChange={handleChangeDateFilter}
-                        />
-                        <select id="sorting" onChange={handleSortingChange} value={sorting}>
-                            <option value="newest">Newest First</option>
-                            <option value="oldest">Oldest First</option>
-                        </select>
+                    ? <div id="admin-area">
+                        <div className="content">
+                            <h3 className="list-title">Admin Area</h3>
+                            <input 
+                                id="username-filter"
+                                type="text"
+                                onChange = {handleChangeUsernameFilter}
+                                placeholder="Filter username"
+                                autoComplete="off"/>
+                            <Datetime 
+                                inputProps={{ placeholder: 'Pick a date and time' }}
+                                timeFormat={'HH:mm'}
+                                onChange={handleChangeDateFilter}
+                            />
+                            <select id="sorting" onChange={handleSortingChange} value={sorting}>
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                            </select>
+                        </div>
                       </div>
                     : ''
                 }
