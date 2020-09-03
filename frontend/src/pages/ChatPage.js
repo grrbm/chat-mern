@@ -36,6 +36,7 @@ function ChatPage(props){
     const [isAdmin, setIsAdmin] = useState(true);
     const [usernameFilter, setUsernameFilter] = useState();
     const [dateFilter, setDateFilter] = useState();
+    const [sorting, setSorting] = useState("newest");
     const socket = useRef(null);
 
     function handleSendMessage(e){
@@ -67,6 +68,10 @@ function ChatPage(props){
     function handleChangeDateFilter(date){
         console.log("date is "+date);
         setDateFilter(date)
+    }
+    function handleSortingChange(e){
+        console.log("sorting changed to "+e.target.value);
+        setSorting(e.target.value);
     }
     useEffect(()=>{
         socket.current = io('http://localhost:4000');
@@ -118,10 +123,9 @@ function ChatPage(props){
                             timeFormat={'HH:mm'}
                             onChange={handleChangeDateFilter}
                         />
-                        <label for="cars">Sort:</label>
-                        <select name="cars" id="cars">
-                            <option value="volvo">Newest First</option>
-                            <option value="saab">Oldest First</option>
+                        <select id="sorting" onChange={handleSortingChange} value={sorting}>
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
                         </select>
                       </div>
                     : ''
@@ -130,8 +134,25 @@ function ChatPage(props){
             <div className="chat__main">
                 <div id="messages" className="chat__messages">
                     {
-                        messages
-                            .filter((message)=> (apply(message,{ username: usernameFilter, createdAt: dateFilter })) )
+                        sorting === "newest" 
+                            ?messages
+                                .filter((message)=> (apply(message,{ username: usernameFilter, createdAt: dateFilter })) )                            
+                                .map((message)=>(
+                                    <div className="message">
+                                        <p>
+                                            <span className="message__meta">
+                                                { moment(message.createdAt).format('DD/MM/YYYY') }
+                                            </span>
+                                            <span className="message__name">{ message.username }</span>
+                                            <span className="message__meta">
+                                                { moment(message.createdAt).format('HH:mm') }
+                                            </span>
+                                        </p>
+                                        <p>{ message.text }</p>
+                                    </div>
+                                ))
+                            :messages
+                            .filter((message)=> (apply(message,{ username: usernameFilter, createdAt: dateFilter })) )                            
                             .map((message)=>(
                                 <div className="message">
                                     <p>
@@ -145,7 +166,7 @@ function ChatPage(props){
                                     </p>
                                     <p>{ message.text }</p>
                                 </div>
-                            ))
+                            )).reverse()
                     }
                     
                 </div>
