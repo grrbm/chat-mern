@@ -96,6 +96,10 @@ function ChatPage(props){
     },[])
     function apply(message, filter){
         var comparison = moment(message.createdAt).isSame(filter.createdAt,"minute");
+        if (filter.createdAt === undefined || filter.createdAt.length === 0)
+        {
+            comparison = true;
+        }
         console.log("checking "+message.createdAt+" against "+moment(filter.createdAt).format()+": "+comparison);
         return (message.username.lastIndexOf(filter.username, 0) === 0 //checks if is prefix
                 || filter.username === undefined 
