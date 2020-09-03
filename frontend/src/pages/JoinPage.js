@@ -21,9 +21,9 @@ function JoinPage(){
                 <h1>Join</h1>
                 <form>
                     <label>Display name</label>
-                    <input type="text" name="username" placeholder="Display name" required="true"></input>
+                    <input type="text" name="username" placeholder="Display name" required={true}></input>
                     <label>Room</label>
-                    <input type="text" name="room" placeholder="Room" required="true"></input>
+                    <input type="text" name="room" placeholder="Room" required={true}></input>
                     <button onClick={handleClick}>Join</button>
                 </form>
             </div>

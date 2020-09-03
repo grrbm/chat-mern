@@ -30,12 +30,13 @@ io.on('connection', (socket) => {
         
         socket.emit('message', generateMessage('Admin','Welcome!'))
         socket.broadcast.to(room).emit('message', generateMessage('Admin',`${user.username} has joined!`))
+        const users = getUsersInRoom(user.room);
         io.to(user.room).emit('roomData',{
             room: user.room,
-            users: getUsersInRoom(user.room)
+            users: users
         })
 
-        callback()
+        return callback(undefined, users)
     })
 
     socket.on('sendMessage',(message, callback)=>{

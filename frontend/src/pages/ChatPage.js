@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 const io = require('socket.io-client');
 
 function ChatPage(props){
+    const [users, setUsers] = useState([]);
     useEffect(()=>{
         const socket = io('http://localhost:4000')
         const username = props.location.state.username;
         const room = props.location.state.room;
-        socket.emit('join', {username, room: room.toLowerCase()}, (error) => {
+        socket.emit('join', {username, room: room.toLowerCase()}, (error, users) => {
             if (error) {
                 alert(error)
                 props.location.href = '/'
+                return;
             }
+            setUsers(users)
+            console.log("These are the users: "+JSON.stringify(users));
         })
     },[])
     return (
@@ -19,7 +23,7 @@ function ChatPage(props){
                 <h2 className="room-title"></h2>
                 <h3 className="list-title">{props.location.state.room}</h3>
                 <ul className="users">
-                    <li>{props.location.state.username}</li>
+                    {users.map((user)=> (<li>{user.username}</li>))}
                 </ul>
             </div>
             <div className="chat__main">
@@ -34,7 +38,7 @@ function ChatPage(props){
                 </div>
                 <div className="compose">
                     <form id="message-form">
-                        <input name="message" placeholder="Message" required="" autoComplete="off"/>
+                        <input name="message" placeholder="Message" required={true} autoComplete="off"/>
                         <button>Send</button>
                     </form>
                     <button id="send-location">Send Location</button>
