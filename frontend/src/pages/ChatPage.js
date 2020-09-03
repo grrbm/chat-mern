@@ -92,6 +92,9 @@ function ChatPage(props){
                         messages.map((message)=>(
                             <div className="message">
                                 <p>
+                                    <span className="message__meta">
+                                        { moment(message.createdAt).format('DD/MM/YYYY') }
+                                    </span>
                                     <span className="message__name">{ message.username }</span>
                                     <span className="message__meta">
                                         { moment(message.createdAt).format('h:mm a') }
