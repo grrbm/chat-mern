@@ -111,13 +111,18 @@ function ChatPage(props){
         <div id="chat-page" className="chat">
             <div id="sidebar" className="chat__sidebar">
                 <div id="room-area">
-                    <h2 className="room-title">Welcome, {props.location.state.username}</h2>
+                    <h2 className="room-title">Welcome, {
+                        props.location.state.username === 'admin'
+                        ? 'Admin'
+                        : props.location.state.username
+                    }
+                    </h2>
                     <h3 className="list-title">In this Room:</h3>
                     <ul className="users">
                         {users.map((user)=> (<li>{user.username}</li>))}
                     </ul>
                 </div>
-                { isAdmin 
+                { props.location.state.username === 'admin' 
                     ? <div id="admin-area">
                         <div className="content">
                             <h3 className="list-title">Admin Area</h3>
