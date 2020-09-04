@@ -50,6 +50,17 @@ userSchema.statics.findByCredentials = async (username, password) => {
     return user;
 }
 
+userSchema.statics.addUser = async function (username, password) {
+    try{
+        const user = new User({username, password});
+        await user.save();
+        const token = await user.generateAuthToken();
+        return { user, token };
+    } catch (e) {
+        return;
+    }
+}
+
 userSchema.methods.toJSON = function() {
     const user = this
     const userObject = user.toObject()

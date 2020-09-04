@@ -32,38 +32,7 @@ router.get('/users/:id', async (req,res) => {
   }
 })
   
-// CREATE - post a new user
-router.post('/users', async (req,res) => {
-    console.log(`REQUEST :: create user  ${req.body.username}`);
-  
-    const newUser = {
-      username: req.body.username,
-      password: req.body.password,
-    };
-  
-    const alreadyExistent = await User.find({'username': newUser.username});
-    
-    console.log("alreadyExistent: "+alreadyExistent.username);
-    if (alreadyExistent.length > 0)
-    {
-      console.error(`STATUS :: Conflict`);
-      return res.status(409).send();
-    }
-    
-    try{
-      const user = new User(newUser);
-      await user.save();
-      const token = await user.generateAuthToken();
-      res.status(201).send({ user, token });
-      console.log(`STATUS :: Success`);
-     } catch (e) {
-        console.error(`STATUS :: Oops. Something went wrong. `+e.toString());
-        res.status(500).json({
-          error: true,
-          message: e.toString()
-        });
-     }
-});
+
 
 
 module.exports = router;

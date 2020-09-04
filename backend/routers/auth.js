@@ -12,10 +12,14 @@ router.post('/auth/signin', async function (req, res) {
     console.log("tokens: "+JSON.stringify(user.tokens));
     return res.status(200).send(user);
   } catch(e){
-    return res.status(400).json({
-      error: true,
-      message: e.toString()
-    });
+    console.log("Couldn't find user with these credentials. Creating new...");
+    const newUser = await User.addUser(req.body.username, req.body.password);
+    if(!newUser){
+      return res.status(400).json({
+        error: true,
+        message: e.toString()
+      });
+    }
   }   
 });
 

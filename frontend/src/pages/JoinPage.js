@@ -20,8 +20,8 @@ function JoinPage(){
                 setToChatPage(true);
             } catch(e) {
                 if (e.toString().includes(400))
-                {
-                    Swal.fire("User doesn't exist");
+                {                
+                    Swal.fire("Couldn't create user. ");
                 }
             }
         }
