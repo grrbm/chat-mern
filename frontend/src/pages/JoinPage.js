@@ -21,7 +21,7 @@ function JoinPage(){
             } catch(e) {
                 if (e.toString().includes(400))
                 {                
-                    Swal.fire("Couldn't create user. ");
+                    Swal.fire("Wrong password.");
                 }
             }
         }

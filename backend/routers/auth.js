@@ -20,6 +20,7 @@ router.post('/auth/signin', async function (req, res) {
         message: e.toString()
       });
     }
+    return res.status(201).send(newUser);
   }   
 });
 
