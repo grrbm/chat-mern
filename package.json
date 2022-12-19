@@ -6,10 +6,16 @@
   "scripts": {
     "start": "cd frontend && npm start",
     "server": "cd backend && npm start",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "clusterBack": "NODE_ENV=production pm2 start backend/server.js -i 1 --name chat-backend",
+    "clusterReloadBack": "NODE_ENV=production pm2 reload chat-backend",
+    "clusterFront": "NODE_ENV=production && cd frontend && pm2 start node_modules/react-scripts/scripts/start.js -i 1 --name chat-frontend",
+    "clusterReloadFront": "NODE_ENV=production pm2 reload chat-frontend"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
