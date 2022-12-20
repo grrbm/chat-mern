@@ -8,19 +8,18 @@ function JoinPage() {
   function handleClick(e) {
     e.preventDefault();
     async function signinUser() {
-      const API_URL =
-        process.env.REACT_APP_ENVIRONMENT === "production"
-          ? ""
-          : "http://localhost:4000";
+      const API_URL = "http://localhost:4000";
       try {
-        const result = await axios({
+        const requestBody = {
           method: "post",
           url: `${API_URL}/auth/signin`,
           data: {
             username: document.querySelectorAll("input")[0].value,
             password: document.querySelectorAll("input")[1].value,
           },
-        });
+        };
+        console.log("this is the request body: " + JSON.stringify(requestBody));
+        const result = await axios(requestBody);
         setToChatPage(true);
       } catch (error) {
         console.log("Failed logging in.");
@@ -32,7 +31,7 @@ function JoinPage() {
           } else if (error.toString().includes(400)) {
             Swal.fire("Wrong password.");
           } else {
-            Swal.fire("Other error: " + JSON.stringify(error));
+            Swal.fire("Other error: " + error.message);
           }
         } else if (error.request) {
           Swal.fire(
