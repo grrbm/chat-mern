@@ -18,7 +18,8 @@
     "sweetalert2": "^9.17.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "clusterTest": "pm2 start --name chat-front node_modules/react-scripts/scripts/start.js --node-args=\"--openssl-legacy-provider\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
