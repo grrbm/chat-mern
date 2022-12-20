@@ -9,9 +9,10 @@ function JoinPage() {
     e.preventDefault();
     async function signinUser() {
       try {
+        const API_URL = "http://localhost:4000";
         const result = await axios({
           method: "post",
-          url: "http://localhost:4000/auth/signin",
+          url: `${API_URL}/auth/signin`,
           data: {
             username: document.querySelectorAll("input")[0].value,
             password: document.querySelectorAll("input")[1].value,
