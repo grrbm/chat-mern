@@ -28,11 +28,11 @@ function JoinPage() {
 
         if (error.response) {
           if (error.response.status === 401) {
-            Swal.fire(error.response.data.message);
+            Swal.fire("Error 401: " + error.response.data.message);
           } else if (error.toString().includes(400)) {
             Swal.fire("Wrong password.");
           } else {
-            Swal.fire(error.response.data.message);
+            Swal.fire("Other error: " + error.response.data.message);
           }
         } else if (error.request) {
           Swal.fire(
