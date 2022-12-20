@@ -32,7 +32,7 @@ function JoinPage() {
           } else if (error.toString().includes(400)) {
             Swal.fire("Wrong password.");
           } else {
-            Swal.fire("Other error: " + error.response.data.message);
+            Swal.fire("Other error: " + JSON.stringify(error));
           }
         } else if (error.request) {
           Swal.fire(
