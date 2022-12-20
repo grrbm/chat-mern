@@ -8,7 +8,10 @@ function JoinPage() {
   function handleClick(e) {
     e.preventDefault();
     async function signinUser() {
-      const API_URL = "http://localhost:4000";
+      const API_URL =
+        process.env.REACT_APP_ENVIRONMENT === "production"
+          ? ""
+          : "http://localhost:4000";
       try {
         const result = await axios({
           method: "post",
