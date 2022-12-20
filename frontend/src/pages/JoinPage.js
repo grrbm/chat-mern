@@ -8,8 +8,8 @@ function JoinPage() {
   function handleClick(e) {
     e.preventDefault();
     async function signinUser() {
+      const API_URL = "http://localhost:4000";
       try {
-        const API_URL = "http://localhost:4000";
         const result = await axios({
           method: "post",
           url: `${API_URL}/auth/signin`,
