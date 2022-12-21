@@ -83,6 +83,12 @@ function ChatPage(props) {
     socket.current.on("connected", () => {
       console.log("Connected 2: " + socket.current.id); // x8WIv7-mJelg7on_ALbx
     });
+    socket.current.on("hello", (arg1, arg2, arg3) => {
+      console.log("Just caught hello from server !");
+      console.log(arg1); // 1
+      console.log(arg2); // "2"
+      console.log(arg3); // { 3: '4', 5: ArrayBuffer (1) [ 6 ] }
+    });
 
     socket.current.on("disconnect", () => {
       console.log("Diconnected: " + socket.current.id); // undefined
