@@ -24,11 +24,10 @@ const cors = require("cors");
 const router = express.Router();
 
 const app = express();
-const server =
-  process.env.ENVIRONMENT === "production"
-    ? https.createServer(app)
-    : http.createServer(app);
+const isProd = process.env.ENVIRONMENT === "production";
+const server = isProd ? https.createServer(app) : http.createServer(app);
 const io = socketio(server);
+console.log("Environment: " + process.env.ENVIRONMENT + ", isProd: " + isProd);
 
 const port = process.env.PORT || 4000;
 const publicDirectoryPath = path.join(__dirname, "../public");
