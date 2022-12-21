@@ -15,7 +15,7 @@ const {
   getUser,
   getUsersInRoom,
 } = require("./utils/users");
-require("dotenv").config();
+require("dotenv").config({ path: __dirname + "/.env" });
 const User = require("./models/user");
 const UserRouter = require("./routers/user"),
   AuthRouter = require("./routers/auth");
