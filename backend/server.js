@@ -71,6 +71,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", (message, callback) => {
+    console.log("sendMessage called");
     const user = getUser(socket.id);
     const filter = new Filter();
     if (filter.isProfane(message)) {
@@ -82,6 +83,7 @@ io.on("connection", (socket) => {
     }
   });
   socket.on("sendLocation", (coords, callback) => {
+    console.log("sendLocation called");
     const user = getUser(socket.id);
     io.to(user.room).emit(
       "locationMessage",
@@ -94,6 +96,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    console.log("disconnect called");
     const user = removeUser(socket.id);
     if (user) {
       //io.to(user.room).emit('message',generateMessage('ChatBot',`${user.username} has left!`))

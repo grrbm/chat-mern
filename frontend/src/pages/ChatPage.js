@@ -78,11 +78,14 @@ function ChatPage(props) {
     const room = props.location.state.room;
     // client-side
     socket.current.on("connect", () => {
-      console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+      console.log("Connected: " + socket.current.id); // x8WIv7-mJelg7on_ALbx
+    });
+    socket.current.on("connected", () => {
+      console.log("Connected 2: " + socket.current.id); // x8WIv7-mJelg7on_ALbx
     });
 
     socket.current.on("disconnect", () => {
-      console.log(socket.id); // undefined
+      console.log("Diconnected: " + socket.current.id); // undefined
     });
     socket.current.on("roomData", ({ room, users }) => {
       setUsers(users);
