@@ -76,6 +76,14 @@ function ChatPage(props) {
     socket.current = io(socketURL);
     const username = props.location.state.username;
     const room = props.location.state.room;
+    // client-side
+    socket.current.on("connect", () => {
+      console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+    });
+
+    socket.current.on("disconnect", () => {
+      console.log(socket.id); // undefined
+    });
     socket.current.on("roomData", ({ room, users }) => {
       setUsers(users);
     });
@@ -83,6 +91,9 @@ function ChatPage(props) {
       setMessages((messages) => [...messages, message]);
       autoscroll();
     });
+    console.log(
+      "emitting join. username: " + username + ", room: " + room.toLowerCase()
+    );
     socket.current.emit(
       "join",
       { username, room: room.toLowerCase() },
