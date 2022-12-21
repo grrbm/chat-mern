@@ -71,7 +71,7 @@ function ChatPage(props) {
   useEffect(() => {
     const socketURL =
       process.env.REACT_APP_ENVIRONMENT === "production"
-        ? "https://guilhermechatapp.xyz/socket.io"
+        ? "https://guilhermechatapp.xyz"
         : "http://localhost:4000";
     socket.current = io(socketURL);
     const username = props.location.state.username;
