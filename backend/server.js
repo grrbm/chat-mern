@@ -50,6 +50,9 @@ io.on("connection", (socket) => {
   console.log("New WebSocket connection");
 
   socket.on("join", ({ username, room }, callback) => {
+    console.log(
+      "Join event has been called. username: " + username + ", room: " + room
+    );
     const { error, user } = addUser({ id: socket.id, username, room });
     if (error) {
       return callback(error);
