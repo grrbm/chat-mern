@@ -48,7 +48,10 @@ app.use(proxy, UserRouter);
 
 io.on("connection", (socket) => {
   console.log("New WebSocket connection");
-
+  console.log("emitting Connected");
+  socket.emit("connected", (error, users) => {
+    console.log("some error here !! " + JSON.stringify(errors));
+  });
   socket.on("join", ({ username, room }, callback) => {
     console.log(
       "Join event has been called. username: " + username + ", room: " + room
